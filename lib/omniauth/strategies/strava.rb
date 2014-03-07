@@ -22,7 +22,9 @@ module OmniAuth
           }
       end
 
-      extra { raw_info }
+      extra do
+        { raw_info: raw_info }
+      end
       
       def raw_info
         @raw_info ||= access_token.get('https://www.strava.com/api/v3/athlete').parsed
