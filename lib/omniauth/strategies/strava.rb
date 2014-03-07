@@ -1,9 +1,9 @@
 require 'omniauth-oauth2'
-
 module OmniAuth
   module Strategies
     class Strava < OmniAuth::Strategies::OAuth2
       option :name, "strava"
+
       option :client_options, {
           site: 'https://www.strava.com',
           authorize_url: 'https://www.strava.com/oauth/authorize',
@@ -22,10 +22,8 @@ module OmniAuth
           }
       end
 
-      extra do
-        { raw_info: raw_info }
-      end
-
+      extra { raw_info }
+      
       def raw_info
         @raw_info ||= access_token.get('https://www.strava.com/api/v3/athlete').parsed
       end
@@ -34,9 +32,11 @@ module OmniAuth
         super.tap do |params|
           params[:client_id] = options[:client_id]
           params[:client_secret] = client.secret
-          params[:access_token] = "45da15fbb0a6dffca57e16985091003e462e451e"
+          params[:access_token] = options.access_token
         end
      end
     end
   end
 end
+
+OmniAuth.config.add_camelization 'strava', 'Strava'
